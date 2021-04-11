@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+@mixin border-reset { //quita lo bordes prederminados bootstrap 
+    outline: none !important;
+    outline-width: 0 !important;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-family: 'Noto Sans', sans-serif;
+
+    .navbar {
+        padding: 8px 3rem;
+        .navbar-brand {
+
+            font-size: 32px;
+            font-weight: 700;
+
+            @media (max-width: 767.98px) {
+                margin-right: auto;
+                margin-left: 1rem;
+            }
+        }
+
+        form {
+            width: 100%;
+            
+
+            .form-control {
+                border: none;
+                border-radius: 17px;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                width: 70%;
+                @include border-reset();
+
+                @media (max-width: 767.98px) {
+                    width: 100%;
+                }
+            }
+
+            .btn {
+                border: none;
+                border-radius: 17px;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                background-color: transparent;
+                @include border-reset();
+
+                &:hover {
+                    background-color: #198754;
+                }
+
+                i {
+                    color: white;
+                }
+
+                @media (max-width: 767.98px) {
+                    background-color: #198754;
+                }
+            }
+        }
+    }
+
+     .contenedor-tabla{
+         padding: 0;
+        .table-responsive-sm {
+            padding: 3rem 3rem 1rem 3rem;
+            .table {
+                
+                thead {
+                    tr {
+                        th {
+                            width: 20%;
+                        }
+                        th:last-child{
+                            display: none;
+                        }
+                    }
+                }
+    
+                tbody {
+                    tr {
+                        td {
+                            width: 20%;
+                        }
+                        td:last-child {
+                            display: none;
+                        }
+                    }
+                }
+        
+                
+            }
+        }
+    } 
+
+    .botones {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 2rem;
+        button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 15px;
+            background-color: transparent;
+            
+            &:hover {
+                background-color: #198754;
+                color: #fff;
+            }
+        }
+        button:focus{
+            @include border-reset();
+        }
+    }
+}
