@@ -24,12 +24,12 @@ const PrincipalView:React.FunctionComponent = () => {
         setMovies(newData)
     }
 
-    useEffect(() => {
-        getData()
-        history.push(`/${page}`)
-    },[])
 
     useEffect(() => {
+        getData()
+        if (history.location.pathname.split('/')[1] != '' && page == 1 ) {
+            setPage(parseInt(history.location.pathname.split('/')[1]))
+        }
         history.push(`/${page}`)
     },[page])
 
