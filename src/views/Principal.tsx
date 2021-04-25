@@ -1,16 +1,27 @@
 import React, {useState, useEffect} from 'react'
-import { useParams } from 'react-router-dom'
 //mis componentes
 import Table from '../components/Table/Table'
 import Navbar from '../components/Navbar/Navbar'
+import Input from '../components/Input/Input'
 
 import { Route, Switch, useHistory } from 'react-router-dom'
+
+import { MovieType } from '../types/types'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 const PrincipalView:React.FunctionComponent = () => {
+    const newMovEmpty:MovieType = {
+        Title: '',
+        Year: '',
+        imdbID: '',
+        Type: '',
+        Poster: '',
+      }
+
     const [movies, setMovies] = useState<any>(undefined)
     const [page, setPage] = useState<number>(1)
+    const [newMov, setNewMov] = useState<MovieType>(newMovEmpty)
     const history = useHistory()
 
 
@@ -24,12 +35,15 @@ const PrincipalView:React.FunctionComponent = () => {
         setMovies(newData)
     }
 
+    useEffect(() => {
+        if (history.location.pathname.split('/')[1] != '' && page == 1) { 
+            setPage(parseInt(history.location.pathname.split('/')[1]))
+        }
+        history.push(`/${page}`)
+      }, []) 
 
     useEffect(() => {
         getData()
-        if (history.location.pathname.split('/')[1] != '' && page == 1 ) {
-            setPage(parseInt(history.location.pathname.split('/')[1]))
-        }
         history.push(`/${page}`)
     },[page])
 
@@ -47,13 +61,58 @@ const PrincipalView:React.FunctionComponent = () => {
                     dataMovie.push({
                         value: propierties[moviesPropierty],
                         type: typeof propierties[moviesPropierty],
+                        //render: formattedMoviesHeads[4] == "Poster" ? <img src="${propierties[4]}"/> : null
                     })
                 }
                 formattedMovies.push(dataMovie)
             }
+            let dataMovie:any[] = []
+            for (let x = 0; x < Object.keys(newMov).length; x++){
+                let propierties = Object.values(newMov)
+                dataMovie.push({
+                value:  propierties[x],
+                type: typeof propierties[x],
+                propiertyName: Object.keys(newMov)[x]
+                })
+            }
+            formattedMovies.push(dataMovie)
         }
         return [formattedMovies, formattedMoviesHeads]
     }
+
+    const getChangedValue = (val:string[]) => {
+        let userArray:string[] = val[1].split(',') 
+        switch (val[0]) {
+            case 'Title':
+                setNewMov({
+                    Title: val[1], Year: newMov.Year, imdbID: newMov.imdbID, Type: newMov.Type , Poster: newMov.Poster
+                })
+            break
+            case 'Year':
+                setNewMov({
+                    Title: newMov.Title, Year: val[1], imdbID: newMov.imdbID, Type: newMov.Type , Poster: newMov.Poster
+                })
+            break
+            case 'imdbID':
+                setNewMov({
+                    Title: newMov.Title, Year: newMov.Year, imdbID: val[1], Type: newMov.Type , Poster: newMov.Poster
+                })
+            break
+            case 'Type':
+                setNewMov({
+                    Title: newMov.Title, Year: newMov.Year, imdbID: newMov.imdbID, Type: val[1], Poster: newMov.Poster
+                })
+            break
+            case 'Poster':
+                setNewMov({
+                    Title: newMov.Title, Year: newMov.Year, imdbID: newMov.imdbID, Type: newMov.Type, Poster: val[1]
+                })
+            break
+        }
+    }
+    
+    useEffect(() => {
+    }, [newMov])
 
 
     return(
@@ -67,6 +126,40 @@ const PrincipalView:React.FunctionComponent = () => {
                     />
                 </Route>
             </Switch>  
+            <h3>Agrega una nueva película</h3>
+            <Input 
+                readonly={false}
+                placeholder='Title'
+                disabled={false}
+                name='Title'
+                value=''
+                onChange={getChangedValue}
+            />
+            <Input 
+                readonly={false}
+                placeholder='Year'
+                disabled={false}
+                name='Year'
+                value=''
+                onChange={getChangedValue}
+            />
+            <Input 
+                readonly={false}
+                placeholder='imdbID'
+                disabled={false}
+                name='imdbID'
+                value=''
+                onChange={getChangedValue}
+            />
+            <Input 
+                readonly={false}
+                placeholder='Type'
+                disabled={false}
+                name='Type'
+                value='movie'
+                onChange={getChangedValue}
+            />
+
             <div className="botones">
                 <button
                     onClick={ () => setPage(page > 1 ? page - 1 : 1 ) }
